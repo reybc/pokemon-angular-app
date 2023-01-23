@@ -3,8 +3,12 @@ import {MatTableDataSource} from "@angular/material/table";
 import {MatPaginator, PageEvent} from "@angular/material/paginator";
 import {PokemonService} from "../../services/pokemon.service";
 import {IPokemonList} from "../../models/pokemon.model";
-import {FormControl} from "@angular/forms";
-import {map, Observable, startWith} from "rxjs";
+import { Observable} from "rxjs";
+
+export interface SummaryTable {
+  name: string;
+  value: number;
+}
 
 @Component({
   selector: 'app-pokemon-list',
@@ -13,44 +17,34 @@ import {map, Observable, startWith} from "rxjs";
 })
 export class PokemonListComponent implements OnInit{
   displayedColumns: string[] = ['name', 'url'];
+  displayedColumns2: string[] = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'Ñ', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
   pokemons: IPokemonList[] | any = [];
+  allPokemons: IPokemonList[] | any = [];
   selectedPokemon: IPokemonList | null = null;
   count = 0;
   isLoading = false;
   pageSize = 20;
   currentPage = 0;
   dataSource = new MatTableDataSource<IPokemonList>(this.pokemons);
-  myControl = new FormControl('');
   filteredOptions = new Observable<IPokemonList[]>;
   filterValue = '';
+  summaryTable: SummaryTable[] = [];
+  isMobile = false;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-  // @ViewChild(MatSort) sort!: MatSort;
   @Output() pokemonChange = new EventEmitter<IPokemonList>();
 
   constructor(private _pokemonService: PokemonService) {
   }
 
   ngOnInit(): void {
+    this.isMobile = window.innerWidth < 600;
     this.getPokemons();
-    // this.filteredOptions = this.myControl.valueChanges.pipe(
-    //   startWith(''),
-    //   map(value => this._filter(value || '')),
-    // );
-    // this.filteredOptions.subscribe(value => {
-    //   console.log(value);
-    //   if (value.length > 0) {
-    //     this.dataSource.filter = value[0].name.trim().toLowerCase();
-    //     if (this.dataSource.paginator) {
-    //       this.dataSource.paginator.firstPage();
-    //     }
-    //   }
-    // });
+    this.getAllPokemons();
   }
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
-    // this.dataSource.sort = this.sort;
   }
 
   getPokemons() {
@@ -60,17 +54,25 @@ export class PokemonListComponent implements OnInit{
       limit: this.pageSize,
     }
     this._pokemonService.getPokemons(options).subscribe(value => {
-      console.log(value);
       this.pokemons = value.results;
       this.count = value.count;
       this.dataSource = new MatTableDataSource<IPokemonList>(value.results);
       this.dataSource.paginator = this.paginator;
-      // this.dataSource.sort = this.sort;
       setTimeout(() => {
         this.paginator.pageIndex = this.currentPage;
         this.paginator.length = value.count;
       }, 1000);
         this.isLoading = false;
+    });
+  }
+
+  getAllPokemons () {
+    console.log(this.count);
+    this._pokemonService.getPokemons({offset: 0, limit: -1}).subscribe(value => {
+      this.allPokemons = value.results;
+      this.displayedColumns2.map(val => {
+        this.summaryTable.push(this._filter(val.toLowerCase()).length);
+      });
     });
   }
 
@@ -80,27 +82,24 @@ export class PokemonListComponent implements OnInit{
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
-    // this.pokemons = this.dataSource.filter;
+
+    this.pokemons = this.dataSource.data.filter(
+      item => item.name.toLowerCase().indexOf(value.toLowerCase()) >= 0);
   }
 
   getRow(row: IPokemonList) {
-    console.log(row);
-    console.log(this.selectedPokemon);
     this.pokemonChange.emit(row);
   }
 
   changePaginator(event: PageEvent) {
-    console.log({ event });
     this.pageSize = event.pageSize;
     this.currentPage = event.pageIndex;
     this.getPokemons();
     this.pokemonChange.emit();
   }
 
-  private _filter(value: string): IPokemonList[] {
+  private _filter(value: string) {
     console.log(value);
-    const filterValue = value.toLowerCase();
-
-    return this.pokemons.filter((option: { name: string; }) => option.name.toLowerCase().includes(filterValue));
+    return this.allPokemons.filter((option: { name: string; }) => option.name.toLowerCase().charAt(0) === value);
   }
 }

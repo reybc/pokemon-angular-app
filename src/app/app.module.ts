@@ -6,7 +6,6 @@ import {MaterialModule} from "./shared/material.module";
 import { AppRoutingModule } from './app-routing.module';
 
 import { AppComponent } from './app.component';
-import { FooterComponent } from './components/footer/footer.component';
 import { PokemonListComponent } from './components/pokemon-list/pokemon-list.component';
 import { PokemonDetailsComponent } from './components/pokemon-details/pokemon-details.component';
 import {MatAutocompleteModule} from "@angular/material/autocomplete";
@@ -16,7 +15,6 @@ import {MatListModule} from "@angular/material/list";
 @NgModule({
   declarations: [
     AppComponent,
-    FooterComponent,
     PokemonListComponent,
     PokemonDetailsComponent
   ],

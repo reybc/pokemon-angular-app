@@ -1,19 +1,21 @@
-<mat-card class="mt-20 mb-20">
-  <mat-card-header>
-    <div mat-card-avatar [style.background-image]="'url('+ (pokemon?.sprites.other.dream_world.front_default) + ')'" class="header-image-avatar"></div>
-    <mat-card-title>{{pokemon?.name | uppercase}}</mat-card-title>
-    <mat-card-subtitle>ID: {{pokemon?.id}}</mat-card-subtitle>
-  </mat-card-header>
-  <img mat-card-image src="{{pokemon?.sprites.other.dream_world.front_default}}" alt="Photo of a Shiba Inu">
-  <mat-card-content>
-    <mat-list>
-      <mat-list-item>Experience: {{pokemon?.base_experience}}</mat-list-item>
-      <mat-divider></mat-divider>
-      <mat-list-item>Order: {{pokemon?.order}}</mat-list-item>
-      <mat-divider></mat-divider>
-      <mat-list-item>Height: {{pokemon?.height}}</mat-list-item>
-      <mat-divider></mat-divider>
-      <mat-list-item>Weight: {{pokemon?.weight}}</mat-list-item>
-    </mat-list>
-  </mat-card-content>
-</mat-card>
+<div class="mat-elevation-z8">
+  <mat-card class="mt-20 mb-20" >
+    <mat-card-header>
+      <div mat-card-avatar [style.background-image]="'url('+ (pokemon?.sprites.other.dream_world.front_default) + ')'" class="header-image-avatar"></div>
+      <mat-card-title>{{pokemon?.name | uppercase}}</mat-card-title>
+      <mat-card-subtitle>ID: {{pokemon?.id}}</mat-card-subtitle>
+    </mat-card-header>
+    <img mat-card-image src="{{pokemon?.sprites.other.dream_world.front_default}}" alt="">
+    <mat-card-content>
+      <mat-list>
+        <mat-list-item>Experience: {{pokemon?.base_experience}}</mat-list-item>
+        <mat-divider></mat-divider>
+        <mat-list-item>Order: {{pokemon?.order}}</mat-list-item>
+        <mat-divider></mat-divider>
+        <mat-list-item>Height: {{pokemon?.height}}</mat-list-item>
+        <mat-divider></mat-divider>
+        <mat-list-item>Weight: {{pokemon?.weight}}</mat-list-item>
+      </mat-list>
+    </mat-card-content>
+  </mat-card>
+</div>
